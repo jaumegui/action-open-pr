@@ -1,0 +1,7 @@
+name: "LC - Start PR with Notion"
+
+description: "Notion / Github bot to start a Pr"
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
