@@ -38,6 +38,10 @@ module Notion
       request(:get, "/pages/#{page_id}")
     end
 
+    def create_page
+      request(:post, '/pages', page_body)
+    end
+
     def query_database(query)
       request(:post, "/databases/#{database_id}/query", query)
     end
@@ -72,6 +76,21 @@ module Notion
         'Content-Type' => 'application/json'
       }
     end
+
+    def page_body
+      {
+        "parent": { "database_id": ENV['NOTION_DATABASE_ID'] },
+        "icon": { "type": "emoji", "emoji": "🐙" },
+        "properties": {
+          "Statut Tech": { "select": { "name": "2 - In progress" } },
+          "Description": {
+            "title": [
+              { "text": { "content": "#{ENV['GH_REPO']} / #{ENV['PR_NUMBER']}" } }
+            ]
+          }
+        }
+      }
+    end
   end
 
   class Wrapper
@@ -87,6 +106,10 @@ module Notion
 
     def get_database(database_id)
       client.retrieve_database(database_id)
+    end
+
+    def create_page
+      Notion::Note.new(client.create_page)
     end
 
     def get_page_by_branch_id(branch_id)
@@ -234,15 +257,9 @@ class OpenPullRequest
   private
 
   def note
-    @note ||= if branch_id
-                wrapper.get_page_by_branch_id(branch_id)
-              else
-                wrapper.create_page(page_body)
-              end
-  end
-
-  def page_body(branch_name)
-    Notion::Page.new(branch_name: branch_name).body
+    @note ||= wrapper.get_page_by_branch_id(branch_id)
+  rescue StandardError => e
+    @note ||= wrapper.create_page
   end
 
   def wrapper
