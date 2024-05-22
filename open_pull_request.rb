@@ -85,7 +85,7 @@ module Notion
           "Statut Tech": { "select": { "name": "2 - In progress" } },
           "Description": {
             "title": [
-              { "text": { "content": "#{ENV['GH_REPO']} / #{ENV['PR_NUMBER']}" } }
+              { "text": { "content": "#{ENV["PR_TITLE"]}" } }
             ]
           }
         }
