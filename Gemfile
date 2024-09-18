@@ -8,4 +8,4 @@ gem 'httparty'
 
 gem "octokit", "~> 5.0"
 
-gem "faraday", "~>2.11.0"
+gem 'json', '~> 2.7.0'
