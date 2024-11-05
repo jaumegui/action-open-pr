@@ -5,7 +5,5 @@ source 'https://rubygems.org'
 ruby '3.0.4'
 
 gem 'httparty'
-
-gem "octokit", "~> 5.0"
-
-gem 'json', '~> 2.7.0'
+gem 'json'
+gem "octokit"
